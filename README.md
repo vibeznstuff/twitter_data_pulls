@@ -8,7 +8,7 @@ This script utilizes the Tweepy Python package and is designed to be run continu
 The scheduled executable is a shell script to be run within unix, however the same could be done on Windows.
 
 Example JSON Config File:
-
+```
 {
 	"consumer_key": "XXXXXXXXXXXXXX",
 	"consumer_secret" : "XXXXXXXXXXXXXX",
@@ -25,7 +25,7 @@ Example JSON Config File:
 		"Black Lives Matter"
 		]
 }
-
+```
 Consumer Key, Consumer Secret, Access Token and Access Token Secret are all API security parameters provided when you obtain access to the Twitter API as a developer.
 
 out_path: The location you'll want to store the output CSV files with the twitter data
