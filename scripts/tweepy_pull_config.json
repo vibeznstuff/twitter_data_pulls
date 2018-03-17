@@ -1,0 +1,16 @@
+{
+	"consumer_key": "CYgEv1FVTNtYaaVgVNt2SYL1k",
+	"consumer_secret" : "0NIUdy6g6JCeJ9ce9kiDwVPCYdcWlw2vqULsTYrQjsrC6WLhGd",
+	"access_token" : "3015690780-Ym82dRDv0DyJTSZX089rLCx3PBHcVbng6xFMNlv",
+	"access_token_secret" : "lAdDEYjY0sMrFoPPoUBW7R8PUQyhuN4uMG8fJ0CaNapZD",
+	"out_path" : "/home/bitnami/projects/twitter_data_pulls/out_files",
+	"log_path" : "/home/bitnami/projects/twitter_data_pulls/out_files",
+	"run_path" : "/home/bitnami/projects/twitter_data_pulls/scripts",
+	"limit_buffer" : 10,
+	"topics" : [
+		"Donald Trump", 
+		"Barak Obama", 
+		"Global Warming", 
+		"Black Lives Matter"
+		]
+}
