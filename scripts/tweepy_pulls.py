@@ -24,9 +24,6 @@ auth.set_access_token(access_token, access_token_secret)
 # Creation of the actual interface, using authentication
 api = tweepy.API(auth)
 
-# Query remaining API search calls to assess if we need to pause
-limit_info = api.rate_limit_status()['resources']['search']['/search/tweets']
-
 # Extract the desired information from the specified tweet object
 def extract_tweet_columns(tweet):
     user = tweet.user
@@ -87,34 +84,36 @@ def extract_tweet_columns(tweet):
 
 # Begin pulling back twitter data by topic
 for topic in topics:
+    # Query remaining API search calls to assess if we need to pause
+    limit_info = api.rate_limit_status()['resources']['search']['/search/tweets']
 
     # Read the maximum ID queried from the last twitter data pull
     # to ensure we start pulling data only from after that point
     try:
-        f = open("{0}/{1}/{1}_max_id.txt".format(out_path,topic.replace(" ","_")),"r+")
+        f = open("{0}/{1}/{1}_max_id.txt".format(out_path,topic.replace(" ","_").lower()),"r+")
         max_id = int(f.read())
-        print("Current max_id is: {0}".format(max_id))
+        print("For topic {1}, current max_id is: {0}!".format(max_id,topic))
     except:
         print("First time pulling data for topic {0}!".format(topic))
         max_id = -1
 		
     # Ensure the out_file directory for this topic exists.
 	# If not, create it.
-    if not os.path.exists("{0}/{1}".format(out_path,topic.replace(" ","_"))):
-        os.makedirs("{0}/{1}".format(out_path,topic.replace(" ","_")))
+    if not os.path.exists("{0}/{1}".format(out_path,topic.replace(" ","_").lower())):
+        os.makedirs("{0}/{1}".format(out_path,topic.replace(" ","_").lower()))
 
     # Run search query to pull 100 tweets back based on the defined topic
     tweets = api.search(topic,count=100,since_id=int(max_id),tweet_mode='extended')
     if limit_info['remaining'] > limit_buffer*random() + len(topics):
-        print(str(limit_info['remaining']) + " searches left!")
-        with open("{0}/{1}/{1}_tweets_{2}_{3}_{4}.csv".format(out_path,topic.replace(" ","_"),str(today.month),str(today.day),str(today.year)), 'a+',newline='') as csvfile:
+        print("On topic {1}, have {0} searches left!".format(str(limit_info['remaining']),topic))
+        with open("{0}/{1}/{1}_tweets_{2}_{3}_{4}.csv".format(out_path,topic.replace(" ","_").lower(),str(today.month),str(today.day),str(today.year)), 'a+',newline='') as csvfile:
             tweet_writer = csv.writer(csvfile, delimiter=',')
             for tweet in tweets:
                 tweet_writer.writerow(extract_tweet_columns(tweet))
                 if tweet.id > max_id:
                     max_id = tweet.id
 
-    print("Max ID is : " + str(max_id))
-    f = open("{0}/{1}/{1}_max_id.txt".format(out_path,topic.replace(" ","_")),"w+")
+    print("For topic {1} Max ID is : {0}!\n".format(str(max_id),topic))
+    f = open("{0}/{1}/{1}_max_id.txt".format(out_path,topic.replace(" ","_").lower()),"w+")
     f.write(str(max_id))
     f.close()
